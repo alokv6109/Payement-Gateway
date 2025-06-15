@@ -20,39 +20,34 @@ public class Transactions {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @NotEmpty
+
     @Column(nullable = false)
+    @NotNull
     private Double amount;
 
-    @NotEmpty
-    @PrimaryKeyJoinColumn
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "sender_id", nullable = false)
     @JsonIgnore
     private User sender;
 
-    @NotEmpty
-    @PrimaryKeyJoinColumn
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "receiver_id", nullable = false)
     @JsonIgnore
     private User receiver;
 
 
-    @NotEmpty
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private InstrumentType debitInstrumentType;
 
 
-    @NotEmpty
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private InstrumentType creditInstrumentType;
 
-    @NotEmpty
     @Column(nullable = false)
     private Long senderInstrumentId;
 
-    @NotEmpty
     @Column(nullable = false)
     private Long receiverInstrumentId;
 

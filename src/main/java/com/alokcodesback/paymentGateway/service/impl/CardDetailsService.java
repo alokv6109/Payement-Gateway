@@ -1,12 +1,12 @@
 package com.alokcodesback.paymentGateway.service.impl;
 
 import com.alokcodesback.paymentGateway.entity.CardDetails;
-import com.alokcodesback.paymentGateway.entity.InstrumentDetails;
 import com.alokcodesback.paymentGateway.entity.User;
 import com.alokcodesback.paymentGateway.exception.DateTimeRelatedException;
 import com.alokcodesback.paymentGateway.exception.ResourceNotFoundExcetion;
 import com.alokcodesback.paymentGateway.payloads.CardDto;
 import com.alokcodesback.paymentGateway.payloads.CardExpiryDateDto;
+import com.alokcodesback.paymentGateway.payloads.InstrumentDetailsResponse;
 import com.alokcodesback.paymentGateway.payloads.InstrumentDto;
 import com.alokcodesback.paymentGateway.payloads.enums.InstrumentType;
 import com.alokcodesback.paymentGateway.repository.CardDetailsRepository;
@@ -17,13 +17,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -66,7 +64,7 @@ public class CardDetailsService implements InstrumentService {
     }
 
     @Override
-    public InstrumentDetails getInstrumentDetailsForUser(Long instrumentId, Long userId, InstrumentType instrumentType) {
+    public InstrumentDetailsResponse getInstrumentDetailsForUser(Long instrumentId, Long userId, InstrumentType instrumentType) {
         if(!instrumentType.toString().equals(InstrumentType.CARD.toString())){
             throw new NullPointerException("The instrument Type is not valid for this type Request type");
         }
@@ -78,7 +76,8 @@ public class CardDetailsService implements InstrumentService {
         {throw new ResourceNotFoundExcetion("cardDetails", "instrument id and userId", instrumentId);});
 
         log.info("Card details returned is : {}", cardDetails.getCardNumber());
-        return cardDetails;
+        InstrumentDetailsResponse instrumentDetailsResponse = InstrumentDetailsResponse.builder().instrumentDetails(cardDetails).user(cardDetails.getUser()).build();
+        return instrumentDetailsResponse;
     }
 
     private CardExpiryDateDto validateAndConvertExpiryDate(String expiryDate){

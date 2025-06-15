@@ -6,6 +6,7 @@ import com.alokcodesback.paymentGateway.entity.InstrumentDetails;
 import com.alokcodesback.paymentGateway.entity.User;
 import com.alokcodesback.paymentGateway.exception.ResourceNotFoundExcetion;
 import com.alokcodesback.paymentGateway.payloads.AccountDetailsDto;
+import com.alokcodesback.paymentGateway.payloads.InstrumentDetailsResponse;
 import com.alokcodesback.paymentGateway.payloads.InstrumentDto;
 import com.alokcodesback.paymentGateway.payloads.enums.InstrumentType;
 import com.alokcodesback.paymentGateway.repository.AccountDetailsRepository;
@@ -56,7 +57,7 @@ public class AccountDetailsService implements InstrumentService {
 
 
     @Override
-    public InstrumentDetails getInstrumentDetailsForUser(Long instrumentId, Long userId, InstrumentType instrumentType) {
+    public InstrumentDetailsResponse getInstrumentDetailsForUser(Long instrumentId, Long userId, InstrumentType instrumentType) {
         if(!instrumentType.toString().equals(InstrumentType.ACCOUNT.toString())){
             throw new NullPointerException("The instrument Type is not valid for this type Request type");
         }
@@ -68,7 +69,8 @@ public class AccountDetailsService implements InstrumentService {
                 () -> {throw new ResourceNotFoundExcetion("accountDetails", "instrument id and userId", instrumentId);});
 
         log.info("the account details entity returned is : {}", accountDetails.getAccountNumber());
-
-        return accountDetails;
+        InstrumentDetailsResponse instrumentDetailsResponse = InstrumentDetailsResponse.builder().instrumentDetails(accountDetails)
+                .user(accountDetails.getUser()).build();
+        return instrumentDetailsResponse;
     }
 }

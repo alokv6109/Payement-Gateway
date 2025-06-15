@@ -6,6 +6,7 @@ import com.alokcodesback.paymentGateway.entity.User;
 import com.alokcodesback.paymentGateway.exception.InstrumentTypeException;
 import com.alokcodesback.paymentGateway.exception.ResourceNotFoundExcetion;
 import com.alokcodesback.paymentGateway.payloads.ApiResponse;
+import com.alokcodesback.paymentGateway.payloads.InstrumentDetailsResponse;
 import com.alokcodesback.paymentGateway.payloads.InstrumentDto;
 import com.alokcodesback.paymentGateway.payloads.enums.InstrumentType;
 import com.alokcodesback.paymentGateway.service.InstrumentService;
@@ -43,9 +44,9 @@ public class InstrumentsController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<InstrumentDetails> getInstrumentForUser(@RequestParam Long instrumentId,
-                                                                  @RequestParam Long userId,
-                                                                  @RequestParam String instrumentType){
+    public ResponseEntity<InstrumentDetailsResponse> getInstrumentForUser(@RequestParam Long instrumentId,
+                                                                          @RequestParam Long userId,
+                                                                          @RequestParam String instrumentType){
         InstrumentType instrumentType1 = InstrumentType.fromValue(instrumentType);
         InstrumentService service = instrumentServiceFactory.getService(instrumentType1);
         if (service == null) {
@@ -53,7 +54,7 @@ public class InstrumentsController {
             throw new InstrumentTypeException("The instrument type is not correct , found type = " + instrumentType1);
         }
 
-        InstrumentDetails instrumentDetails = service.getInstrumentDetailsForUser(instrumentId, userId, instrumentType1);
+        InstrumentDetailsResponse instrumentDetails = service.getInstrumentDetailsForUser(instrumentId, userId, instrumentType1);
         return ResponseEntity.ok(instrumentDetails);
     }
 

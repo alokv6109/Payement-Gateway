@@ -2,32 +2,33 @@ package com.alokcodesback.paymentGateway.payloads;
 
 import com.alokcodesback.paymentGateway.payloads.enums.InstrumentType;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class TransactionsDto {
 
-    @NotEmpty
+    @NotNull
     private Double amount;
 
-    @NotEmpty
+    @NotNull
     private Long senderId;
 
-    @NotEmpty
+    @NotNull
     private Long receiverId;
 
 
-    @NotEmpty
+    @NotNull
     private InstrumentType debitInstrumentType;
 
 
-    @NotEmpty
+    @NotNull
     private InstrumentType creditInstrumentType;
 
-    @NotEmpty
+    @NotNull
     private Long senderInstrumentId;
 
-    @NotEmpty
+    @NotNull
     private Long receiverInstrumentId;
 
 }
